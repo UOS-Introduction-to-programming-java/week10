@@ -28,14 +28,22 @@ public class ParseTest {
 		Parser parser = new Parser();
 		Document document = parser.parse(new StringReader("<a></a>"));
 		assertEquals("a", document.element.name);
-		assertEquals("", document.element.body.text);
+		assertEquals("", document.element.body.get(0).text);
 	}
 	
 	@Test public void testTextElement() throws IOException {
 		Parser parser = new Parser();
 		Document document = parser.parse(new StringReader("<a>2/3</a>"));
 		assertEquals("a", document.element.name);
-		assertEquals("2/3", document.element.body.text);
+		assertEquals("2/3", document.element.body.get(0).text);
+	}
+	
+	@Test public void testNestedElement() throws IOException {
+		Parser parser = new Parser();
+		Document document = parser.parse(new StringReader("<a><b></b> lala</a>"));
+		assertEquals("a", document.element.name);
+		assertEquals("b", document.element.body.get(0).element.name);
+		assertEquals(" lala", document.element.body.get(1).text);
 	}
 	
 	@Test public void testInvalidNoStartName() throws IOException {

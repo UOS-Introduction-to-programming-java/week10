@@ -35,12 +35,22 @@ public class Parser {
 	private Element element(PushbackLexer lex) throws IOException {
 		String start = start(lex);
 		if (null == start) return null;
-		Document body = document(lex);
+		Element ret = new Element(start);
+
+		Document body = null;
+		do {
+			body = document(lex);
+			if (null != body) {
+				ret.add(body);
+			}
+		} while (body != null);
+
 		String end = end(lex);
 		if (!start.equals(end)) {
 			throw new IOException("Expected </"+ start + ">, got </" + end + ">");
 		}
-		return new Element(start, body);
+
+		return ret;
 	}
 
 	private String tag(PushbackLexer lex, boolean expectSlash) throws IOException {
