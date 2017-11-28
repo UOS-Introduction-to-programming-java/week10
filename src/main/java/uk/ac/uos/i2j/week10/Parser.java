@@ -6,13 +6,18 @@ import java.io.Reader;
 public class Parser {
 	public Document parse(Reader in) throws IOException {
 		PushbackLexer lex = new PushbackLexer(new Lexer(in));
+		Symbol s = lex.next();
+		if (null == s) return new Document("");
+		lex.unread(s);
 		return document(lex);
 	}
 	
 	private Document document(PushbackLexer lex) throws IOException {
 		Element element = element(lex);
 		if (null == element) {
-			return new Document(text(lex));
+			String s = text(lex);
+			if (0 == s.length()) return null;
+			return new Document(s);
 		}
 		return new Document(element);
 	}
