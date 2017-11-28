@@ -14,4 +14,9 @@ public class Symbol {
 	public Symbol(Type type) {
 		this(type, null);
 	}
+	
+	@Override
+	public String toString() {
+		return "Symbol(type=" + type + ",value=" + value + ")";
+	}
 }
